@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API E-Commerce — REST API Toko Online | Supabase + Express.js</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="REST API lengkap untuk aplikasi E-Commerce. Menyediakan endpoint autentikasi, produk, keranjang, pesanan, ulasan, dan dashboard admin. Dibangun dengan Express.js dan Supabase.">
+  <meta name="keywords" content="API, E-Commerce, REST API, Supabase, Express.js, Toko Online, Backend, Node.js">
+  <meta name="author" content="PiwApiw">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://api-tb-f2wk.onrender.com/">
+  <meta property="og:title" content="API E-Commerce — REST API Toko Online">
+  <meta property="og:description" content="REST API lengkap untuk aplikasi E-Commerce dengan autentikasi JWT, manajemen produk, keranjang belanja, pesanan, dan dashboard admin.">
+  <meta property="og:image" content="https://picsum.photos/seed/api-ecommerce/1200/630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="API E-Commerce — REST API Toko Online">
+  <meta name="twitter:description" content="REST API lengkap untuk aplikasi E-Commerce dengan autentikasi JWT, manajemen produk, keranjang belanja, pesanan, dan dashboard admin.">
+  <meta name="twitter:image" content="https://picsum.photos/seed/api-ecommerce/1200/630">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://api-tb-f2wk.onrender.com/">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#3b82f6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .container { max-width: 720px; width: 100%; }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+    }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header .icon { font-size: 2.5rem; color: #3b82f6; margin-bottom: 0.75rem; }
+    .header h1 { font-size: 1.75rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+    .header p { color: #64748b; font-size: 0.95rem; }
+    .badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.75rem;
+      border: 1px solid #a7f3d0;
+    }
+    .badge i { font-size: 0.5rem; vertical-align: middle; margin-right: 4px; }
+    .section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .endpoints {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: #334155;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .endpoint:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(59,130,246,0.1);
+    }
+    .ep-icon {
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .ep-icon.auth { background: #8b5cf6; }
+    .ep-icon.categories { background: #f59e0b; }
+    .ep-icon.products { background: #3b82f6; }
+    .ep-icon.cart { background: #10b981; }
+    .ep-icon.orders { background: #ec4899; }
+    .ep-icon.reviews { background: #f97316; }
+    .ep-icon.dashboard { background: #06b6d4; }
+    .endpoint .path {
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      color: #475569;
+      font-size: 0.8rem;
+    }
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.3rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #3b82f6;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(59,130,246,0.3);
+    }
+    .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 1.5rem; }
+      .header h1 { font-size: 1.4rem; }
+      .endpoints { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="icon"><i class="fa-solid fa-cart-shopping"></i></div>
+        <h1>API E-Commerce</h1>
+        <p>REST API untuk aplikasi toko online dengan integrasi Supabase</p>
+        <span class="badge"><i class="fa-solid fa-circle"></i> v1.0.0 &bull; Online</span>
+      </div>
+
+      <p class="section-title">Endpoint Tersedia</p>
+      <div class="endpoints">
+        <a class="endpoint" href="/api/auth">
+          <span class="ep-icon auth"><i class="fa-solid fa-key"></i></span>
+          <span class="path">/api/auth</span>
+        </a>
+        <a class="endpoint" href="/api/categories">
+          <span class="ep-icon categories"><i class="fa-solid fa-folder"></i></span>
+          <span class="path">/api/categories</span>
+        </a>
+        <a class="endpoint" href="/api/products">
+          <span class="ep-icon products"><i class="fa-solid fa-box"></i></span>
+          <span class="path">/api/products</span>
+        </a>
+        <a class="endpoint" href="/api/cart">
+          <span class="ep-icon cart"><i class="fa-solid fa-cart-shopping"></i></span>
+          <span class="path">/api/cart</span>
+        </a>
+        <a class="endpoint" href="/api/orders">
+          <span class="ep-icon orders"><i class="fa-solid fa-receipt"></i></span>
+          <span class="path">/api/orders</span>
+        </a>
+        <a class="endpoint" href="/api/reviews">
+          <span class="ep-icon reviews"><i class="fa-solid fa-star"></i></span>
+          <span class="path">/api/reviews</span>
+        </a>
+        <a class="endpoint" href="/api/dashboard">
+          <span class="ep-icon dashboard"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="path">/api/dashboard</span>
+        </a>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/api-docs"><i class="fa-solid fa-book"></i> Swagger Docs</a>
+        <a class="btn btn-secondary" href="/api/products"><i class="fa-solid fa-bolt"></i> Lihat Produk</a>
+      </div>
+
+      <p class="footer">Dibangun dengan Express.js</p>
+    </div>
+  </div>
+</body>
+</html>
